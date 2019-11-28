@@ -1,0 +1,9 @@
+{
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [{
+        "database": "${workspaceFolder}/db.sqlite3",
+        "dialect": "SQLite",
+        "name": "db.sqlite3"
+    }],
+    "sqltools.useNodeRuntime": true
+}
