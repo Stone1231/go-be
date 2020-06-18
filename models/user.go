@@ -14,7 +14,7 @@ type User struct {
 	BirthdayStr string    `sql:"-" json:"birthday"`
 	Photo       string    `gorm:"photo" json:"photo"`
 	Dept        Dept      `gorm:"foreignkey:DeptID;" json:"-"`
-	DeptID      uint      `gorm:"dept_id" json:"dept"`
+	DeptID      uint      `gorm:"dept_id" json:"dept,string,omitempty"`
 	Projs       []Proj    `gorm:"many2many:user_proj;" json:"-"`
 	ProjIDs     []uint    `sql:"-" json:"projs"`
 }

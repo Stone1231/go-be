@@ -30,8 +30,12 @@ func (self *UserService) Update(model *Model.User) error {
 		return err
 	}
 
-	DB.First(&(model.Dept), model.DeptID)
-	model.DeptID = model.Dept.ID //FIXME
+	// DB.First(&(ori.Dept), ori.DeptID)
+
+	// FIXME
+	model.Dept.ID = model.DeptID
+	DB.First(&model.Dept)
+	// DB.First(&(model.Dept), model.DeptID)
 
 	tx := DB.Begin()
 
