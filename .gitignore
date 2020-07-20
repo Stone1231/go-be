@@ -28,3 +28,5 @@ db.sqlite3
 go-be
 .DS_Store
 *.jpg
+
+/static/*
