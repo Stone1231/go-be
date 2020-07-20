@@ -9,7 +9,7 @@ type User struct {
 	// Model
 	ID          uint      `gorm:"primary_key;AUTO_INCREMENT" json:"id" uri:"id"`
 	Name        string    `json:"name"`
-	Hight       int       `gorm:"hight" json:"hight"`
+	Hight       int       `gorm:"hight" json:"hight,string,omitempty"`
 	Birthday    time.Time `gorm:"birthday" json:"-"`
 	BirthdayStr string    `sql:"-" json:"birthday"`
 	Photo       string    `gorm:"photo" json:"photo"`
