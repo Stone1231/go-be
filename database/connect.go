@@ -1,11 +1,13 @@
 package database
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	. "go-be/models"
 	"log"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var DB *gorm.DB
@@ -15,6 +17,7 @@ func InitDB() (*gorm.DB, error) {
 
 	os.Remove("db.sqlite3")
 	db, err := gorm.Open("sqlite3", "db.sqlite3")
+	// db, err := gorm.Open("mysql", "root:test@tcp(127.0.0.1:3306)/db?charset=utf8&parseTime=true&multiStatements=true")
 
 	if err != nil {
 		panic("failed to connect database")

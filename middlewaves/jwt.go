@@ -1,11 +1,11 @@
 package middlewaves
 
 import (
+	Model "go-be/models"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	Model "go-be/models"
 )
 
 var identityKey = "id"

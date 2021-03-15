@@ -1,0 +1,65 @@
+definitions:
+  models.User:
+    properties:
+      birthday:
+        type: string
+      dept:
+        example: "0"
+        type: string
+      hight:
+        type: integer
+      id:
+        description: |-
+          gorm.Model
+          Model
+        type: integer
+      name:
+        type: string
+      photo:
+        type: string
+      projs:
+        items:
+          type: integer
+        type: array
+    type: object
+info:
+  contact: {}
+  description: GO microservice server.
+  title: GO API
+paths:
+  /api/user:
+    post:
+      parameters:
+      - description: create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      tags:
+      - user
+  /api/user/{id}:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      tags:
+      - user
+schemes:
+- http
+- https
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

@@ -15,6 +15,11 @@ type UserController struct {
 
 var User = new(UserController)
 
+// @Tags user
+// @Produce json
+// @Param user body models.User true "create user"
+// @Success 200 {object} Model.User
+// @Router /api/user [post]
 func (t *UserController) Post(c *gin.Context) {
 	var model Model.User
 
@@ -57,6 +62,10 @@ func (t *UserController) Put(c *gin.Context) {
 	c.JSON(http.StatusOK, model)
 }
 
+// @Tags user
+// @Produce json
+// @Success 200 {object} models.User
+// @Router /api/user/{id} [get]
 func (t *UserController) Get(c *gin.Context) {
 	var model Model.User
 
