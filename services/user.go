@@ -14,50 +14,40 @@ type UserService struct {
 var User = new(UserService)
 
 func (self *UserService) Create(model *Model.User) error {
-
 	DB.First(&(model.Dept), model.DeptID)
-
 	DB.Where("ID in (?)", model.ProjIDs).Find(&(model.Projs))
-
 	return DB.Create(model).Error
 }
 
 func (self *UserService) Update(model *Model.User) error {
-
 	var ori Model.User
-
 	if err := DB.First(&ori, model.ID).Error; err != nil {
 		return err
 	}
 
-	// DB.First(&(ori.Dept), ori.DeptID)
-
 	// FIXME
 	model.Dept.ID = model.DeptID
 	DB.First(&model.Dept)
-	// DB.First(&(model.Dept), model.DeptID)
+	//DB.First(&(model.Dept), model.DeptID)
+
+	DB.Where("ID in (?)", model.ProjIDs).Find(&model.Projs)
 
 	tx := DB.Begin()
-
 	tx.Model(&ori).Association("Projs").Clear() //ori clear
-	tx.Where("ID in (?)", model.ProjIDs).Find(&model.Projs)
-
-	if err := tx.Model(&ori).Update(model).Error; err != nil {
+	if err := tx.Save(&model).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
-
 	return tx.Commit().Error
 }
 
 func (self *UserService) ReadOne(id uint) Model.User {
 	var model Model.User
+	//DB.First(&model, id).Association("Dept").Find(&model.Dept)
+	DB.First(&model, id)
+	DB.Model(&model).Association("Dept").Find(&model.Dept)
 
-	DB.First(&model, id).Related(&model.Dept, "Dept")
-	// If the field name is same as the variable's type name, like above example, it could be omitted, like:
-	// db.Model(&model).Related(&model.Dept)
-
-	DB.Model(model).Related(&model.Projs, "Projs")
+	DB.Model(model).Association("Projs").Find(&model.Projs)
 	// db.Preload("Projs").First(&model)
 	model.BirthdayStr = model.Birthday.Format("2006-01-02")
 
@@ -70,54 +60,42 @@ func (self *UserService) ReadOne(id uint) Model.User {
 
 func (self *UserService) ReadAll() []Model.User {
 	var list []Model.User
-
 	DB.Find(&list)
-
 	return list
 }
 
 func (self *UserService) Delete(id uint) error {
-
 	var model Model.User
 	if err := DB.First(&model, id).Error; err != nil {
 		return err
 	}
-
 	tx := DB.Begin()
-
-	if err := tx.Model(&model).Association("projs").Clear().Error; err != nil {
+	if err := tx.Model(&model).Association("Projs").Clear(); err != nil {
 		tx.Rollback()
 		return err
 	}
-
 	if err := tx.Delete(&model).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
-
 	return tx.Commit().Error
 }
 
 func (self *UserService) Clear() error {
-
 	var list []Model.User
 	DB.Find(&list)
-
 	tx := DB.Begin()
-
 	for i := 0; i < len(list); i++ {
-		var model Model.User = list[i]
-		if err := tx.Model(&model).Association("projs").Clear().Error; err != nil {
+		model := list[i]
+		if err := tx.Model(&model).Association("Projs").Clear(); err != nil {
 			tx.Rollback()
 			return err
 		}
-
 		if err := tx.Delete(&model).Error; err != nil {
 			tx.Rollback()
 			return err
 		}
 	}
-
 	return tx.Commit().Error
 }
 
@@ -154,8 +132,6 @@ func (self *UserService) Init() error {
 
 func (self *UserService) Query(name string) []Model.User {
 	var list []Model.User
-
 	DB.Where("name LIKE ?", "%"+name+"%").Find(&list)
-
 	return list
 }

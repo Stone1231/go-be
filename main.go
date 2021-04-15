@@ -34,7 +34,10 @@ func main() {
 		return
 	}
 
-	defer db.Close()
+	defer func() {
+		sqlDB, _ := db.DB()
+		sqlDB.Close()
+	}()
 
 	services.Init.All()
 

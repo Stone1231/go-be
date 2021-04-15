@@ -26,7 +26,10 @@ func TestMain(m *testing.M) {
 		log.Println("err open databases")
 		return
 	}
-	defer db.Close()
+	defer func() {
+		sqlDB, _ := db.DB()
+		sqlDB.Close()
+	}()
 
 	retCode := m.Run()
 
